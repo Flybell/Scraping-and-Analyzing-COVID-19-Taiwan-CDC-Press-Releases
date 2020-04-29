@@ -1,4 +1,4 @@
-# Analyzing Taiwan CDC COVID-19 Press Releases
+# Scraping the web for Taiwan CDC COVID-19 press releases
 
 
 ## Intro
@@ -29,8 +29,8 @@ Here, it gives you a "taster" of the type of data that can be extracted from the
 The script creates a "daily_new_cases.txt" file that prints out the total number of new confirmed cases reported in each day's press release (Note that the first few days have "N/A" because the writing style has not yet taken its current formulaic shape. Data from these files need to be retrieved manually).
 
 ## Instructions
-Download all the files into the same folder. 
-Make sure you have the following libraries installed: re, beautifulsoup & request 
-Run "Execute.py"
-Run "Process_Data.py"
+1. Download all the files into the same folder. 
+2. Make sure you have the following libraries installed: re, beautifulsoup & request 
+3. Run "Execute.py"
+4. For a teaser analysis, run "Process_Data.py"
 
