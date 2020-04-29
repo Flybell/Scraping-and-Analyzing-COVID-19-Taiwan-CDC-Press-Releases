@@ -2,7 +2,7 @@
 
 
 ## Intro
-Each day, the Taiwan CDC (https://www.cdc.gov.tw/) publishes an English and a Chinese press release reporting each day's newly confirmed case(s). The Chinese press release, in particular, contains a rich and largely formulaic paragraph detailing the key characteristics of the confirmed cases, e.g., gender, where they live, how they got infected, symptom progression and onset date, confirmation date. 
+Each day, the Taiwan CDC (https://www.cdc.gov.tw/) publishes an English and a Chinese press release reporting that day's newly confirmed case(s). The Chinese press release, in particular, contains rich and largely formulaic paragraphes detailing the key characteristics of the confirmed cases, e.g., gender, where they live, how they got infected, symptom progression and onset date, confirmation date. This repo is part of a larger Natural Language Processing project to extract and analyze the transmission cluseters in Taiwan. The formulaic style of these press releases make them easier to wrangle. 
 
 The ultimate goal is to use this data to construct a graph database (with neo4j) and visualize/analyze known transmission clusters. Before that, we need to first glean the relevant press releases from the Taiwan CDC site, store them in a clean text file, and extract data for each case. 
 
