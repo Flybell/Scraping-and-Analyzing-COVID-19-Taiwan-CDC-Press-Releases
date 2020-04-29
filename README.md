@@ -7,7 +7,7 @@ This repo is part of a larger Natural Language Processing project to extract and
 
 ## About this repo
 
-Two scripts, two function files, two unit tests (for the functions).
+Two scripts, two method modules, two unit tests (for the methods).
 
 ### The Execute.py script
 This script crawls and downloads press releases that are related to COVID-19.
