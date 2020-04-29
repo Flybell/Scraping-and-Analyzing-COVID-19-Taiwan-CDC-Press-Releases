@@ -12,9 +12,13 @@ This repo contains a script that crawls and downloads press releases that are re
 It creates a folder of text files with the following format:
 
 title based on the year-month-date of the press release: 
+
 \d\d\d\d-\d\d-\d\d.txt 
 
 body:
+
 title of the press release
+
 date of the press release
+
 text content of the press release 
