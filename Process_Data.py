@@ -1,3 +1,5 @@
+"""Script: process file data"""
+
 import re #regular expression
 import io #for UTF8 processing
 from bs4 import BeautifulSoup #HTML parser library
