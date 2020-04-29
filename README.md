@@ -1,4 +1,4 @@
-# Scraping the web for Taiwan CDC COVID-19 press releases
+# Scraping Taiwan CDC COVID-19 press releases
 
 ## Intro
 Each day, the Taiwan CDC (https://www.cdc.gov.tw/) publishes an English and a Chinese press release reporting that day's newly confirmed case(s). The Chinese press release, in particular, contains rich and largely formulaic paragraphes detailing the key characteristics of the confirmed cases, e.g., gender, where they live, how they got infected, symptom progression and onset date, confirmation date. The formulaic style of these press releases make it easier to wrangle data with basic regular expressions.
