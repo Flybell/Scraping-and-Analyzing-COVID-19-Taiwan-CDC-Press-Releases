@@ -7,10 +7,10 @@ Each day, the Taiwan CDC (https://www.cdc.gov.tw/) publishes an English and a Ch
 The ultimate goal is to use this data to construct a graph database (with neo4j) and visualize/analyze known transmission clusters. Before that, we need to first glean the relevant press releases from the Taiwan CDC site, store them in a clean text file, and extract data for each case. 
 
 ## About this repo
-This repo contains a script that crawls and downloads press releases that are related to COVID-19.
 
 ### The Execute.py script 
-produces a set of text files, one for each press release, with the following format:
+This script crawls and downloads press releases that are related to COVID-19.
+It produces a set of text files, one for each press release, with the following format:
 
 title based on the year-month-date of the press release: 
 
