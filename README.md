@@ -9,7 +9,9 @@ The ultimate goal is to use this data to construct a graph database (with neo4j)
 ## About this repo
 This repo contains a script that crawls and downloads press releases that are related to COVID-19.
 
-It creates a folder of text files with the following format:
+It creates two outputs:
+
+(1) a folder of text files with the following format:
 
 title based on the year-month-date of the press release: 
 
@@ -22,3 +24,6 @@ title of the press release
 date of the press release
 
 text content of the press release 
+
+(2) a "daily_new_cases.txt" file that prints out the total number of new confirmed cases reported in each day's press release. 
+Note that the first few days have "N/A" because the writing style has not yet taken its current formulaic shape. Data from these files need to be retrieved manually. 
