@@ -54,6 +54,44 @@ def write_url(url_list):
         for url in url_list:
             url_file.write(url+"\n")
 
+def list_of_urls(file):
+    """get list of urls from file"""
+    with open(file, "r+") as url_file:
+        url = url_file.readlines()
+    return url
+
+def get_info(url):
+    """get press release date, title, and text from press release url"""
+    soup = make_request(url)
+
+    #get press release title
+    title_text = soup.find("h2", "con-title").text.strip()
+    title = title_text.partition('\n')[0]
+
+    #get press release content and date
+    div = soup.find_all("div") #find div tags
+    for ele in div:
+        for div2 in ele("div","text-right"):
+            if "發佈日期" in div2.text:
+                text = ele.text
+                date = re.findall("\d\d\d\d-\d\d-\d\d", div2.text)[0]
+                break #prevents reiterating upwards to all div parents
+    return date, title, text
+
+def create_file(date, title, text):
+    """create new text files, one for each press release"""
+    """with date as file name and text as content"""
+    if (date, title, text):
+        filename = "%s.txt" % date
+        with io.open(filename, "w+", encoding="UTF8") as newfile:
+            text = text.replace(" ", "") #remove all spaces
+            sentences= re.sub("，|。", "\n", text) #one sentence per line
+            newfile.write(title+"\n")
+            newfile.write(date+"\n")
+            newfile.write(sentences)
+    else:
+        print("no data")
+
 #def find_last_section(first_url):
 #    """find the last section"""
 #    next_url = first_url
