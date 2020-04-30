@@ -18,5 +18,6 @@ with open("daily_new_cases.txt", "w+") as file:
         if number:
             file.write(f"{get_date(name):{10}} {number}\n")
             num = num + int(number)
+            
 print("Created new file of daily new cases.")
 print(f"Total number of cases: {num}")
