@@ -1,5 +1,8 @@
+"""Methods: scrape press releases from web and store in  text files"""
+
 import re #regular expression
 from bs4 import BeautifulSoup #web parsing library
+import io
 #----make requests as a browser-----#
 import requests
 headers = requests.utils.default_headers()
@@ -19,33 +22,23 @@ def make_request(url):
     soup = BeautifulSoup (req.content, "html5lib")
     return soup
 
-def find_next_page(url):
+def find_next_page(soup):
     """returns url of next page"""
-    soup = make_request(url)
     base = "https://www.cdc.gov.tw"
     next_page = soup.find_all("a", rel="next", text="下一頁")
     if next_page:
         next_url = base + next_page[0]["href"]
         return next_url
+    else:
+        None
 
-def get_url(url):
+def get_url(soup):
     """ find all the COVID-19 related press releases on the page"""
     url_list = []
-    soup = make_request(url)
     for a in soup.find_all('a', {"href": re.compile("typeid=9$")}):
         if "新增" in a["title"]:
             url = "https://www.cdc.gov.tw" + a['href']
             url_list.append(url)
-    return url_list
-
-def make_url_list(url):
-    """iterate through all search pages to create"""
-    """a list of COVID-10 related press releases"""
-    url_list = []
-    next_url = url
-    while next_url:
-        url_list.extend(get_url(next_url))
-        next_url = find_next_page(next_url)
     return url_list
 
 def write_url(url_list):
@@ -54,11 +47,11 @@ def write_url(url_list):
         for url in url_list:
             url_file.write(url+"\n")
 
-def list_of_urls(file):
+def read_urls(file):
     """get list of urls from file"""
     with open(file, "r+") as url_file:
-        url = url_file.readlines()
-    return url
+        url_list = url_file.readlines()
+    return url_list
 
 def get_info(url):
     """get press release date, title, and text from press release url"""
