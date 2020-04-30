@@ -34,7 +34,7 @@ def case_num(file):
     elif w2:
         return w2.group(1)
     else:
-        return "N/A"
+        return None
 
 #get date from created file
 def get_date(file):

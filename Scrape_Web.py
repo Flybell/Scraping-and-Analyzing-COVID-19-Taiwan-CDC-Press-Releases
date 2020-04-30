@@ -9,11 +9,11 @@ headers = requests.utils.default_headers()
 headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
 #----------------------------------#
 
-def create_url(page_num, timestamp, search_term):
+def create_url(page_num, start_time, end_time, search_term):
     """creates an url from page number, time stamp, and search terms"""
     """timestamp format: \d\d\d\d.\d\d.\d\d""" #2020.01.01 #新增 確診
     base="https://www.cdc.gov.tw/Bulletin/List/MmgtpeidAR5Ooai4-fgHzQ"
-    url = base + "?page=" + str(page_num) + "&startTime=" + str(timestamp) + "&keyword=" + str(search_term)
+    url = base + "?page=" + str(page_num) + "&startTime=" + str(start_time) + "&endTime=" + str(end_time) + "&keyword=" + str(search_term)
     return url
 
 def make_request(url):
@@ -34,9 +34,10 @@ def find_next_page(soup):
 
 def get_url(soup):
     """ find all the COVID-19 related press releases on the page"""
+    """criteria: any(s in a["title"] for s in ('新增', '確診', '肺炎')"""
     url_list = []
     for a in soup.find_all('a', {"href": re.compile("typeid=9$")}):
-        if "新增" in a["title"]:
+        if any(s in a["title"] for s in ('新增', '確診', '肺炎')):
             url = "https://www.cdc.gov.tw" + a['href']
             url_list.append(url)
     return url_list
@@ -71,19 +72,28 @@ def get_info(url):
                 break #prevents reiterating upwards to all div parents
     return date, title, text
 
-def create_file(date, title, text):
+def create_file(date, title, text, n):
     """create new text files, one for each press release"""
     """with date as file name and text as content"""
-    if (date, title, text):
-        filename = "%s.txt" % date
-        with io.open(filename, "w+", encoding="UTF8") as newfile:
-            text = text.replace(" ", "") #remove all spaces
-            sentences= re.sub("，|。", "\n", text) #one sentence per line
-            newfile.write(title+"\n")
-            newfile.write(date+"\n")
-            newfile.write(sentences)
-    else:
-        print("no data")
+    filename = "%s_%s.txt" % (date, n)
+    with io.open(filename, "w+", encoding="UTF8") as newfile:
+        text = text.replace(" ", "") #remove all spaces
+        sentences= re.sub("，|。", "\n", text) #one sentence per line
+        newfile.write(title+"\n")
+        newfile.write(date+"\n")
+        newfile.write(sentences)
+        print(filename)
+
+def batch_create_files(url_list):
+    n=0
+    for url in url_list:
+        date, title, text = get_info(url)
+        if (date, title, text):
+            create_file(date, title, text, n)
+            n= n+1
+        else:
+            print("no data")
+
 
 #def find_last_section(first_url):
 #    """find the last section"""
