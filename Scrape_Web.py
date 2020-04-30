@@ -1,75 +1,72 @@
-"""Methods to get data from the web"""
-
 import re #regular expression
-import io #UTF8 processing
-from bs4 import BeautifulSoup #HTML parser library
-import requests #make requests as a browser
+from bs4 import BeautifulSoup #web parsing library
+#----make requests as a browser-----#
+import requests
 headers = requests.utils.default_headers()
 headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'})
+#----------------------------------#
 
-#----------------------------------------
-#find all pages based on search criteria
-#----------------------------------------
-def find_all_pages():
-    page_urls = []
-    #part 1 and 3 come from search term "新增 確診" starting Jan 1, 2020
-    part_1="https://www.cdc.gov.tw/Bulletin/List/MmgtpeidAR5Ooai4-fgHzQ?page="
-    part_3 = "&startTime=2020.01.01&keyword=%27%E6%96%B0%E5%A2%9E%20%E7%A2%BA%E8%A8%BA%27"
-    for n in range(1, 25): #known: a total of 24 pages
-        page_urls.append(part_1 + str(n) + part_3)
-    return page_urls
+def create_url(page_num, timestamp, search_term):
+    """creates an url from page number, time stamp, and search terms"""
+    """timestamp format: \d\d\d\d.\d\d.\d\d""" #2020.01.01 #新增 確診
+    base="https://www.cdc.gov.tw/Bulletin/List/MmgtpeidAR5Ooai4-fgHzQ"
+    url = base + "?page=" + str(page_num) + "&startTime=" + str(timestamp) + "&keyword=" + str(search_term)
+    return url
 
-#find all links on page that refer to press releases
+def make_request(url):
+    """request HTML from url with beautiful soup"""
+    req = requests.get(url, headers)
+    soup = BeautifulSoup (req.content, "html5lib")
+    return soup
+
+def find_next_page(url):
+    """returns url of next page"""
+    soup = make_request(url)
+    base = "https://www.cdc.gov.tw"
+    next_page = soup.find_all("a", rel="next", text="下一頁")
+    if next_page:
+        next_url = base + next_page[0]["href"]
+        return next_url
+
 def get_url(url):
+    """ find all the COVID-19 related press releases on the page"""
     url_list = []
-    req = requests.get(url, headers) #request HTML
-    soup = BeautifulSoup (req.content, "html5lib") #make soup object
+    soup = make_request(url)
     for a in soup.find_all('a', {"href": re.compile("typeid=9$")}):
         if "新增" in a["title"]:
             url = "https://www.cdc.gov.tw" + a['href']
             url_list.append(url)
     return url_list
 
-#create list of press releases url
+def make_url_list(url):
+    """iterate through all search pages to create"""
+    """a list of COVID-10 related press releases"""
+    url_list = []
+    next_url = url
+    while next_url:
+        url_list.extend(get_url(next_url))
+        next_url = find_next_page(next_url)
+    return url_list
+
 def write_url(url_list):
+    """create URLS.txt file of press release url"""
     with open("URLS.txt", "a+") as url_file:
         for url in url_list:
             url_file.write(url+"\n")
 
-#get URL from file of urls and create files
-def list_of_urls(file):
-    with open(file, "r+") as url_file:
-        url = url_file.readlines()
-    return url
+#def find_last_section(first_url):
+#    """find the last section"""
+#    next_url = first_url
+#    while next_url:
+#        final_url = next_url
+#        next_url = find_next_section(make_request(next_url))
+#    page_num = re.search("page=([0-9]+)", str(final_url))
+#    return page_num.group(1)
 
-#get the text from the right spot in the HTML file through URL
-def get_info(url):
-    req = requests.get(url, headers) #request HTML
-    soup = BeautifulSoup (req.content, "html5lib") #make soup object
-
-    #get press release title
-    title_text = soup.find("h2", "con-title").text.strip()
-    title = title_text.partition('\n')[0]
-
-    #get press release content and date
-    div = soup.find_all("div") #find div tags
-    for ele in div:
-        for div2 in ele("div","text-right"):
-            if "發佈日期" in div2.text:
-                text = ele.text
-                date = re.findall("\d\d\d\d-\d\d-\d\d", div2.text)[0]
-                break #prevents reiterating upwards to all div parents
-    return date, title, text
-
-#create new file with date as file name and text as content
-def create_file(date, title, text):
-    if (date, title, text):
-        filename = "%s.txt" % date
-        with io.open(filename, "w+", encoding="UTF8") as newfile:
-            text = text.replace(" ", "") #remove all spaces
-            sentences= re.sub("，|。", "\n", text) #one sentence per line
-            newfile.write(title+"\n")
-            newfile.write(date+"\n")
-            newfile.write(sentences)
-    else:
-        print("no data")
+#def create_url_list(period, keywords):
+#    page_urls = []
+#    page = create_url(1, period, keywords)
+#    while page:
+#    for n in range(1, n): #known: a total of 24 pages
+#        page_urls.append(create_url(n, period, keywords))
+#    return page_urls
