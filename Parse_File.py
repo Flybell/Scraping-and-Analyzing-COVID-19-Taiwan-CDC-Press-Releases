@@ -18,6 +18,8 @@ def case_num(file):
     #exceptions
     w1 = re.search(r"新增([0-9]+)確診", str(first_line))
     w2 = re.search(r"新增([0-9]+)例確定病例", str(first_line))
+    w3 = re.search(r"發現首例", str(first_line))
+    w4 = re.search(r"新增確診([0-9]+)例", str(first_line))
     #return case numbers
     if x and not u:
         cases = x.group(1)
@@ -33,6 +35,10 @@ def case_num(file):
         return w1.group(1)
     elif w2:
         return w2.group(1)
+    elif w3:
+        return "1"
+    elif w4:
+        return w4.group(1)
     else:
         return None
 
