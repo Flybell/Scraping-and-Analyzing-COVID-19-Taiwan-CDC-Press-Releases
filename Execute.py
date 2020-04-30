@@ -33,4 +33,5 @@ write_url(url_list)
 print("Creating individual files")
 for url in url_list:
   date, title, text = get_info(url)
-  create_file(date, title, text)
+  if (date, title, text):
+      create_file(date, title, text)
