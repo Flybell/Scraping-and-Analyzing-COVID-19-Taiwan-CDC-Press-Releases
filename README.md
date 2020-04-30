@@ -33,9 +33,11 @@ The script creates a "daily_new_cases.txt" file that prints out the total number
 1. Download all the files into the same folder.
 2. Make sure you have the following libraries installed: beautifulsoup & request
 
+In command line & your virtual environment:
+
 `$ pip install requests`
 
-`pip install beautifulsoup4`
+`$ pip install beautifulsoup4`
 
 3. Run "Execute.py"
 4. For a teaser analysis, run "Process_Data.py"
