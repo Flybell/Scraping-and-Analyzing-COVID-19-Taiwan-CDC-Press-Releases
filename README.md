@@ -35,5 +35,7 @@ The script creates a "daily_new_cases.txt" file that prints out the total number
 
 `$ pip install requests`
 
+`pip install beautifulsoup4`
+
 3. Run "Execute.py"
 4. For a teaser analysis, run "Process_Data.py"
