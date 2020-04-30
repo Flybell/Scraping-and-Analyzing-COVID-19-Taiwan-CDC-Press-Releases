@@ -7,7 +7,6 @@ import glob #to create file name from variable
 
 #import functions
 from Parse_File import get_date, case_num
-from Scrape_Web import get_info, create_file, get_url
 
 #extract data from press releases
 with open("daily_new_cases.txt", "w+") as file:
