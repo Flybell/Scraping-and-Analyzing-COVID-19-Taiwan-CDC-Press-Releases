@@ -16,27 +16,33 @@ def case_num(file):
     #no cases
     z = re.search(r"無新增", str(first_line))
     #exceptions
+    u2 = re.search(r"新增([0-9]+)例死亡", str(first_line))
     w1 = re.search(r"新增([0-9]+)確診", str(first_line))
     w2 = re.search(r"新增([0-9]+)例確定病例", str(first_line))
     w3 = re.search(r"發現首例", str(first_line))
     w4 = re.search(r"新增確診([0-9]+)例", str(first_line))
+    w5 = re.search(r"茲卡病毒感", str(first_line))
     #return case numbers
-    if x and not u:
-        cases = x.group(1)
-        return cases
+    if u2: #remove reports about deaths
+        return None
+    elif w5: #remove non-COVID reports
+        return None
+    elif z: #no new reports
+        return "0"
+    elif w3: #first case
+        return "1"
     elif x and u:
         cases = u.group(1)
         return cases
+    elif x:
+        cases = x.group(1)
+        return cases
     elif y:
         return "1"
-    elif z:
-        return "0"
     elif w1:
         return w1.group(1)
     elif w2:
         return w2.group(1)
-    elif w3:
-        return "1"
     elif w4:
         return w4.group(1)
     else:
