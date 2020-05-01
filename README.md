@@ -39,5 +39,7 @@ In command line, within your virtual environment:
 
 `$ pip install beautifulsoup4`
 
+I use the Anaconda package for matplotlib.
+
 3. Run "Execute.py"
 4. For a teaser analysis, run "Process_Data.py"
