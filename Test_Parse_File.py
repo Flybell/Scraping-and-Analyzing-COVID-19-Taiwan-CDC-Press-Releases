@@ -35,7 +35,7 @@ class TodayTestCase(unittest.TestCase):
     def test_exception_death_case_num(self):
 
         output = case_num("2020-04-10_142.txt")
-        self.assertEqual(output, ('0'))
+        self.assertEqual(output, None)
 
 
 unittest.main()
