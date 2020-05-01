@@ -10,34 +10,43 @@ def case_num(file):
         first_line = f.readlines()
     #explicit statement of number of cases
     x = re.search(r"公\w+新增([0-9]+)例", str(first_line))
-    u = re.search(r"其中([0-9]+)例確診", str(first_line))
+    x1 = re.search(r"其中([0-9]+)例確診", str(first_line))
     #one cases
     y= re.search(r"第[0-9]+例\S+", str(first_line))
+    y1= re.search(r"第[0-9]+例\S+改善", str(first_line))
     #no cases
     z = re.search(r"無新增", str(first_line))
     #exceptions
-    u2 = re.search(r"新增([0-9]+)例死亡", str(first_line))
+    w0 = re.search(r"新增([0-9]+)例死亡", str(first_line))
     w1 = re.search(r"新增([0-9]+)確診", str(first_line))
     w2 = re.search(r"新增([0-9]+)例確定病例", str(first_line))
     w3 = re.search(r"發現首例", str(first_line))
     w4 = re.search(r"新增確診([0-9]+)例", str(first_line))
     w5 = re.search(r"茲卡病毒感", str(first_line))
+    w6 = re.search(r"中央流行疫情指揮中心統計", str(first_line))
+#    w7 = re.search(r"新加坡\w+公布([0-9]+)例", str(first_line))
     #return case numbers
-    if u2: #remove reports about deaths
+    if w0: #remove reports about deaths
         return None
     elif w5: #remove non-COVID reports
         return None
     elif z: #no new reports
         return "0"
+    elif w6: #remove pure stats
+        return None
+#    elif w7: #wrong country
+#        return None
     elif w3: #first case
         return "1"
-    elif x and u:
-        cases = u.group(1)
+    elif x and x1:
+        cases = x1.group(1)
         return cases
-    elif x:
+    elif x and not x1:
         cases = x.group(1)
         return cases
-    elif y:
+    elif y and y1:
+        return None
+    elif y and not y1:
         return "1"
     elif w1:
         return w1.group(1)
